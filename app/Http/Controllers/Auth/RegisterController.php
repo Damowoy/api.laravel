@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 
+
+/**
+ * Class RegisterController
+ * @package App\Http\Controllers\Auth
+ */
 class RegisterController extends Controller
 {
     /*
@@ -64,6 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+       
         return User::create([
             'username'  => $data['username'],
             'firstname' => $data['firstname'],
@@ -76,12 +81,14 @@ class RegisterController extends Controller
         ]);
     }
     
+    /**
+     * @param Request $request
+     * @param $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function registered(Request $request, $user)
     {
-        
-        /* $token = Password::getRepository()->createNewToken();
-         $user->api_token=$token;
-         $user->save();*/
+
         $user->generateToken();
         
         return response()->json(['data' => $user->toArray()], 201);
